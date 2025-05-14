@@ -1,0 +1,11 @@
+Name: register.rpc
+ListenOn: 127.0.0.1:28080
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: ucenter.rpc
+Mysql:
+  DataSource: root:root@tcp(127.0.0.1:3309)/mscoin?charset=utf8mb4&parseTime=True&loc=Local
+CacheRedis:
+  - Host: 127.0.0.1:6379
+    Type: node

@@ -1,0 +1,9 @@
+Name: ucenterapi-api
+Host: 0.0.0.0
+Port: 28888
+
+UCenterRpcConf:
+  Etcd:
+    Hosts:
+    - 127.0.0.1:2379
+    Key: ucenter.rpc
