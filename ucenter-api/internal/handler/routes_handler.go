@@ -12,4 +12,5 @@ func RegisterHandlers(r *Routers, serverCtx *svc.ServiceContext) {
 	registerRouter:=r.Group()
 
 	registerRouter.Get("/uc/register/phone",register.Register)
+	registerRouter.Post("/uc/mobile/code",register.SendCode)
 }
