@@ -1,9 +1,11 @@
 package handler
 
 import (
+	"errors"
 	"net/http"
 
 	coincommon "github.com/wushengyouya/coin_exchange/coin-common"
+	"github.com/wushengyouya/coin_exchange/coin-common/tools"
 	"github.com/wushengyouya/coin_exchange/ucenter-api/internal/logic"
 	"github.com/wushengyouya/coin_exchange/ucenter-api/internal/svc"
 	"github.com/wushengyouya/coin_exchange/ucenter-api/internal/types"
@@ -21,11 +23,17 @@ func NewRegisterHandler(svcCtx *svc.ServiceContext) *RegisterHandler {
 }
 func (h *RegisterHandler) Register(w http.ResponseWriter, r *http.Request) {
 	var req types.Request
-	// if err := httpx.Parse(r, &req); err != nil {
-	// 	httpx.ErrorCtx(r.Context(), w, err)
-	// 	return
-	// }
-
+	if err := httpx.ParseJsonBody(r, &req); err != nil {
+		httpx.ErrorCtx(r.Context(), w, err)
+		return
+	}
+	newResult := coincommon.NewResult()
+	if req.Captcha == "" {
+		httpx.OkJsonCtx(r.Context(), w, newResult.Deal(nil, errors.New("人机校验不通过")))
+		return
+	}
+	// 获取Ip
+	req.Ip = tools.GetRemoteClientIp(r)
 	l := logic.NewRegisterLogic(r.Context(), h.svcCtx)
 	resp, err := l.Register(&req)
 	result := coincommon.NewResult().Deal(resp, err)

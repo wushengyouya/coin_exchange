@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/jinzhu/copier"
 	"github.com/wushengyouya/coin_exchange/grpc_common/ucenter/types/register"
 	"github.com/wushengyouya/coin_exchange/ucenter-api/internal/svc"
 	"github.com/wushengyouya/coin_exchange/ucenter-api/internal/types"
@@ -29,7 +30,12 @@ func (l *RegisterLogic) Register(req *types.Request) (resp *types.Response, err 
 	// todo: add your logic here and delete this line
 	c, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	_, err = l.svcCtx.UCRegisterRpc.RegisterByPhone(c, &register.RegReq{})
+	rpcReq := &register.RegReq{}
+	err = copier.Copy(rpcReq, req)
+	if err != nil {
+		logx.Error("copier err: ", err)
+	}
+	_, err = l.svcCtx.UCRegisterRpc.RegisterByPhone(c, rpcReq)
 	if err != nil {
 		logx.Error("Register err: ", err)
 	}

@@ -4,7 +4,15 @@
 package types
 
 type Request struct {
-	Name string `path:"name,options=you|me"`
+	UserName string `json:"username"`
+	Password string `json:"password"`
+	Captcha string `json:"captcha"`
+	Phone string `json:"phone"`
+	Promotion string `json:"promotion"`
+	Code string `json:"code"`
+	Country string `json:"country"`
+	SuperPartner string `json:"superpartner"`
+	Ip string `json:"ip,optional"`
 }
 
 type Response struct {

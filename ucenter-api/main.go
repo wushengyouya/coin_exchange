@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"net/http"
 
 	"github.com/wushengyouya/coin_exchange/ucenter-api/internal/config"
 	"github.com/wushengyouya/coin_exchange/ucenter-api/internal/handler"
@@ -20,7 +21,11 @@ func main() {
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 
-	server := rest.MustNewServer(c.RestConf)
+	// 增加跨域请求
+	server := rest.MustNewServer(c.RestConf, rest.WithCustomCors(func(header http.Header) {
+		header.Set("Access-Control-Allow-Headers",
+			"DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,token,x-auth-token")
+	}, nil, "http://localhost:8080"))
 	defer server.Stop()
 
 	ctx := svc.NewServiceContext(c)

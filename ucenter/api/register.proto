@@ -12,7 +12,8 @@ message RegReq {
     string promotion = 5;
     string code = 6;
     string country =7;
-    string superPartner = 8;    
+    string superPartner = 8;   
+    string ip = 9; 
 }
 
 message CaptchaReq {
